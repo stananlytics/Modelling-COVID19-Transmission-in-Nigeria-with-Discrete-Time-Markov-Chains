@@ -1,0 +1,159 @@
+# COVID-19 Outbreak Analysis in Nigeria Using a Discrete-Time Markov Chain Model
+
+![R](https://img.shields.io/badge/Language-R-blue?logo=r)
+![Analysis](https://img.shields.io/badge/Analysis-Data%20Analysis-orange)
+![Model](https://img.shields.io/badge/Model-Markov%20Chain-purple)
+![Status](https://img.shields.io/badge/Project-Completed-success)
+
+## 1. Project Overview
+
+This project investigates the early outbreak of COVID-19 in Nigeria using data from the first 34 days of the outbreak, covering the period between **20 March 2020 and 22 April 2020**.
+
+The study applies a Discrete-Time Markov Chain (DTMC) framework to represent the movement of individuals between three epidemiological states: Susceptible, Infected, and Recovered (SIR).
+
+Using R programming, the project explores COVID-19 trends, examines the geographical distribution of reported cases, estimates transition probabilities, constructs a transition probability matrix, and investigates the long-run behaviour of the resulting Markov chain.
+
+The project combines exploratory data analysis, statistical modelling, probability theory, and geographical data visualisation to examine the early progression of COVID-19 in Nigeria.
+
+## 2. Project Objectives
+
+The major objectives of this project are:
+
+1. To explore and analyse the early COVID-19 outbreak data in Nigeria.
+2. To examine the distribution and trends of confirmed COVID-19 cases over the study period.
+3. To visualise the geographical distribution of reported cases across Nigerian states, highlighting locations with available case data.
+4. To construct a discrete-time Markov chain representing transitions between Susceptible, Infected, and Recovered states.
+5. To estimate transition probabilities and construct the transition probability matrix.
+6. To investigate steady-state probabilities and future transition behaviour.
+7. To calculate the fundamental matrix and expected absorption times.
+
+## 3. Dataset Description
+
+The analysis uses an Excel dataset containing daily COVID-19 records for the first 34 days of the outbreak in Nigeria.
+
+**Study period:** 20 March 2020 – 22 April 2020.
+
+**Number of daily observations:** 34.
+
+### Dataset variables
+
+| Variable | Description |
+|---|---|
+| Date | Date of observation |
+| Day | Sequential day of observation |
+| Confirmed_Nigeria | Cumulative confirmed cases in Nigeria |
+| Confirmed_Lagos | Cumulative confirmed cases in Lagos |
+| Confirmed_Abuja | Cumulative confirmed cases in Abuja |
+| Incidence_Nigeria | Daily new cases in Nigeria |
+| Incidence_Lagos | Daily new cases in Lagos |
+| Incidence_Abuja | Daily new cases in Abuja |
+
+The dataset was cleaned and transformed before analysis. Date variables were converted into R date format, while numerical variables were converted into appropriate numeric data types.
+
+**Important geographical note:** The dataset provides individual confirmed-case figures for Lagos and Abuja, not all 36 states. The geographical visualisation uses Nigerian state boundaries, but does not imply that state-level case figures were available for every state.
+
+## 4. Tools and Technologies
+
+The project was carried out using the following tools and R packages:
+
+| Tool/Package | Purpose |
+|---|---|
+| R | Statistical computing and analysis |
+| RStudio | Development environment |
+| readxl | Importing Excel datasets |
+| dplyr | Data manipulation |
+| tidyverse | Data wrangling |
+| ggplot2 | Data visualisation |
+| janitor | Data cleaning |
+| lubridate | Date manipulation |
+| markovchain | Markov chain construction and analysis |
+| expm | Matrix exponentiation |
+| sf | Spatial data handling |
+| rnaturalearth | Geographical boundary data |
+| ggrepel | Improved geographical labels |
+
+## 5. Methodology
+
+The analysis was conducted in several stages.
+
+### 5.1 Data Cleaning and Preparation
+
+The original Excel dataset was imported into R using `readxl`.
+
+The cleaning process involved:
+
+- Renaming the dataset columns.
+- Removing the additional header row.
+- Converting Excel dates into standard R date format.
+- Converting relevant variables into numeric data types.
+- Inspecting the dataset structure and summary statistics.
+
+### 5.2 Exploratory Data Analysis (EDA)
+
+Exploratory data analysis was performed to understand the distribution and progression of confirmed COVID-19 cases.
+
+The visualisations included:
+
+- A histogram with a density curve showing the distribution of confirmed cases.
+- A time-series line plot illustrating confirmed COVID-19 cases over the 34-day study period.
+
+### 5.3 Geographical Visualisation
+
+Geographical visualisation was performed using `sf`, `rnaturalearth`, `ggplot2`, and `ggrepel`.
+
+A map of Nigeria was created using state boundary data. Available COVID-19 figures for Lagos and Abuja were represented using proportional point sizes and geographical labels.
+
+### 5.4 Construction of the SIR Model
+
+The project adopted a three-state epidemiological framework:
+
+- **Susceptible (S):** Individuals classified as susceptible to infection.
+- **Infected (I):** Individuals classified as infected.
+- **Recovered (R):** Individuals classified as recovered within the model's constructed state definition.
+
+The effective population used in the original analysis was defined as the maximum cumulative confirmed cases recorded during the study period.
+
+The state variables were constructed as follows:
+
+\[
+S_t=N_{\text{effective}}-C_t
+\]
+
+\[
+I_t=\text{Daily Incidence}_t
+\]
+
+\[
+R_t=C_t-\text{Daily Incidence}_t
+\]
+
+Where:
+
+- \(S_t\) represents the susceptible state.
+- \(I_t\) represents the infected state.
+- \(R_t\) represents the constructed recovered state.
+- \(C_t\) represents cumulative confirmed cases.
+
+### 5.5 Estimation of Transition Probabilities
+
+Two transition probabilities were used:
+
+**Infection probability (p):**
+
+The infection probability was calculated using the ratio of daily new cases to the previous day's susceptible count:
+
+\[
+p_t=\frac{\text{Daily Incidence}_{t+1}}{S_t}
+\]
+
+The average of the available daily probabilities was used as the estimated infection probability.
+
+**Recovery probability (q):**
+
+The recovery probability was specified as:
+
+\[
+q=\frac{1}{14}
+\]
+
+This represents an assumed average recovery period of 14 days. It was an assumption in the model rather than an estimate from
